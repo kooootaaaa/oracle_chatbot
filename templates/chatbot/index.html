@@ -3,104 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>不具合情報チャットボット</title>
+    <title>Oracle 不具合情報チャットボット</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-xl: 0 35px 60px -12px rgba(0, 0, 0, 0.3);
+            --border-radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-gradient);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+        }
+
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            position: relative;
         }
+
+        /* Glassmorphism Header */
         .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            padding: 2.5rem 2rem;
             text-align: center;
-            background-color: #2c3e50;
-            color: white;
-            padding: 20px;
-            border-radius: 10px 10px 0 0;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
         }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-gradient);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: var(--shadow-lg);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.9);
+            font-weight: 400;
+        }
+
+        /* Chat Container */
         .chat-container {
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 0 0 10px 10px;
-            height: 400px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            height: 500px;
             overflow-y: auto;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-xl);
+            position: relative;
         }
-        .message {
-            margin-bottom: 15px;
-            padding: 10px;
+
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
             border-radius: 10px;
-            max-width: 80%;
         }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+        }
+
+        /* Messages */
+        .message {
+            margin-bottom: 1.5rem;
+            animation: slideIn 0.3s ease-out;
+            max-width: 85%;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .user-message {
-            background-color: #3498db;
+            background: var(--primary-gradient);
             color: white;
+            padding: 1.2rem 1.8rem;
+            border-radius: 25px 25px 8px 25px;
             margin-left: auto;
             text-align: right;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
         }
+
+        .user-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+        }
+
         .bot-message {
-            background-color: #ecf0f1;
-            color: #2c3e50;
+            background: rgba(255,255,255,0.9);
+            color: var(--text-primary);
+            padding: 1.2rem 1.8rem;
+            border-radius: 25px 25px 25px 8px;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
             white-space: pre-line;
+            line-height: 1.6;
         }
+
+        /* Input Container */
         .input-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            padding: 1.5rem;
             display: flex;
-            gap: 10px;
+            gap: 1rem;
+            align-items: center;
+            box-shadow: var(--shadow-xl);
         }
+
         #userInput {
             flex: 1;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 25px;
-            font-size: 16px;
+            padding: 1rem 1.5rem;
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            font-size: 1rem;
             outline: none;
+            background: rgba(255,255,255,0.9);
+            color: var(--text-primary);
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
         }
+
         #userInput:focus {
-            border-color: #3498db;
+            border-color: rgba(102, 126, 234, 0.8);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
         }
-        #sendButton, #summaryButton {
-            padding: 15px 30px;
-            background-color: #3498db;
-            color: white;
+
+        #userInput::placeholder {
+            color: var(--text-secondary);
+        }
+
+        /* Modern Buttons */
+        .btn {
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 16px;
-            margin-left: 10px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+            justify-content: center;
         }
-        #sendButton:hover {
-            background-color: #2980b9;
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
         }
-        #sendButton:disabled, #summaryButton:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
+
+        .btn:hover::before {
+            left: 100%;
         }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        #sendButton {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
         #summaryButton {
-            background-color: #27ae60;
+            background: var(--success-gradient);
+            color: white;
         }
-        #summaryButton:hover {
-            background-color: #229954;
+
+        .btn:disabled {
+            background: linear-gradient(135deg, #a0a0a0 0%, #808080 100%);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
+
+        .btn:disabled::before {
+            display: none;
+        }
+
+        /* Loading Animation */
         .loading {
-            color: #7f8c8d;
+            color: var(--text-secondary);
             font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+
+        .loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-secondary);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Clickable Items */
         .clickable-item {
-            color: #3498db;
+            color: #667eea;
             cursor: pointer;
-            text-decoration: underline;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 2px 6px;
+            border-radius: 6px;
+            transition: var(--transition);
+            position: relative;
         }
+
         .clickable-item:hover {
-            color: #2980b9;
-            font-weight: bold;
+            background: rgba(102, 126, 234, 0.1);
+            color: #5a67d8;
+            transform: translateY(-1px);
         }
-        /* モーダル */
+
+        /* Modern Modal */
         .modal {
             display: none;
             position: fixed;
@@ -109,46 +343,161 @@
             top: 0;
             width: 100%;
             height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
-            background-color: #fefefe;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
             margin: 5% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 800px;
-            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 90%;
+            max-width: 900px;
+            border-radius: var(--border-radius);
             max-height: 80vh;
             overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: slideUp 0.3s ease-out;
         }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .close {
-            color: #aaa;
+            color: var(--text-secondary);
             float: right;
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 2rem;
+            font-weight: 300;
             cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
         }
-        .close:hover,
-        .close:focus {
-            color: black;
+
+        .close:hover {
+            background: rgba(244, 63, 94, 0.1);
+            color: #f43f5e;
+            transform: rotate(90deg);
         }
+
         .modal-header {
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
         }
+
+        .modal-header h2 {
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
+
         .detail-section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255,255,255,0.7);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
         }
+
         .detail-label {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .header {
+                padding: 1.5rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .chat-container {
+                height: 400px;
+                padding: 1rem;
+            }
+
+            .input-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 1.5rem;
+            }
+        }
+
+        /* Floating Particles Animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            animation: float-particle 15s infinite linear;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -156,7 +505,9 @@
     <!-- 詳細表示用モーダル -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal()">
+                <span class="material-icons">close</span>
+            </span>
             <div class="modal-header">
                 <h2 id="modalTitle">詳細情報</h2>
             </div>
@@ -166,24 +517,39 @@
         </div>
     </div>
     
+    <!-- Floating Particles Background -->
+    <div class="particles" id="particles"></div>
+    
     <div class="container">
         <div class="header">
-            <h1>🤖 不具合情報チャットボット</h1>
-            <p>TR品番、TR品名、車種などを入力して不具合情報を検索できます</p>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <span class="material-icons">smart_toy</span>
+                    </div>
+                </div>
+                <h1>不具合情報チャットボット</h1>
+                <p>TR品番、TR品名、車種などを入力して不具合情報を検索できます</p>
+            </div>
         </div>
         
         <div class="chat-container" id="chatContainer">
             <div class="message bot-message">
                 こんにちは！不具合情報チャットボットです。<br>
-                TR品番、TR品名、車種名などを入力して、関連する不具合情報を検索してください。<br><br>
-                例：「ABC123」「エンジン」「プリウス」など
+                TR品番、TR品名、車種名などを入力して、関連する不具合情報を検索してください。
             </div>
         </div>
         
         <div class="input-container">
             <input type="text" id="userInput" placeholder="TR品番、TR品名、車種などを入力してください..." onkeypress="handleKeyPress(event)">
-            <button id="sendButton" onclick="sendMessage()">送信</button>
-            <button id="summaryButton" onclick="sendSummary()">要約</button>
+            <button id="sendButton" class="btn" onclick="sendMessage()">
+                <span class="material-icons">search</span>
+                検索
+            </button>
+            <button id="summaryButton" class="btn" onclick="sendSummary()">
+                <span class="material-icons">summarize</span>
+                要約
+            </button>
         </div>
     </div>
 
@@ -396,9 +762,26 @@
             }
         }
         
+        // Floating particles animation
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = particle.style.height = (Math.random() * 6 + 2) + 'px';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        
         // ページ読み込み時にフォーカス
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('userInput').focus();
+            createParticles();
         });
     </script>
 </body>

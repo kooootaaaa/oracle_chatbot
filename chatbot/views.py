@@ -98,26 +98,30 @@ def chat(request):
                     response_text += f"【関連車種】\n"
                     if shashu_set:
                         for shashu in sorted(shashu_set):
-                            escaped_shashu = html.escape(shashu).replace("'", "\\'")
-                            response_text += f'<span class="clickable-item" onclick="showDetail(\'{escaped_shashu}\', \'shashu\')">{html.escape(shashu)}</span>　'
+                            # HTMLエスケープを削除してクリック可能にする
+                            safe_shashu = shashu.replace("'", "\\'").replace('"', '\\"')
+                            response_text += f'<span class="clickable-item" onclick="showDetail(\'{safe_shashu}\', \'shashu\')">{shashu}</span>　'
                         response_text += "\n\n"
                     else:
                         response_text += "車種情報なし\n\n"
                     
                     response_text += f"【主な不具合内容】（クリックで詳細表示）\n"
                     for i, fuguai in enumerate(fuguai_list[:3], 1):
-                        display_text = html.escape(fuguai)
-                        response_text += f'{i}. <span class="clickable-item" onclick="showDetailFromSummary({i-1}, \'fuguai\')">{display_text}</span>...\n'
+                        # HTMLエスケープを削除してクリック可能にする
+                        safe_fuguai = fuguai.replace("'", "\\'").replace('"', '\\"').replace('\n', ' ')
+                        response_text += f'{i}. <span class="clickable-item" onclick="showDetailFromSummary({i-1}, \'fuguai\')">{fuguai}</span>...\n'
                     
                     response_text += f"\n【主な推定原因】（クリックで詳細表示）\n"
                     for i, genin in enumerate(genin_list[:3], 1):
-                        display_text = html.escape(genin)
-                        response_text += f'{i}. <span class="clickable-item" onclick="showDetailFromSummary({i-1}, \'genin\')">{display_text}</span>...\n'
+                        # HTMLエスケープを削除してクリック可能にする
+                        safe_genin = genin.replace("'", "\\'").replace('"', '\\"').replace('\n', ' ')
+                        response_text += f'{i}. <span class="clickable-item" onclick="showDetailFromSummary({i-1}, \'genin\')">{genin}</span>...\n'
                     
                     response_text += f"\n【主な対策案】（クリックで詳細表示）\n"
                     for i, taisaku in enumerate(taisaku_list[:3], 1):
-                        display_text = html.escape(taisaku)
-                        response_text += f'{i}. <span class="clickable-item" onclick="showDetailFromSummary({i-1}, \'taisaku\')">{display_text}</span>...\n'
+                        # HTMLエスケープを削除してクリック可能にする
+                        safe_taisaku = taisaku.replace("'", "\\'").replace('"', '\\"').replace('\n', ' ')
+                        response_text += f'{i}. <span class="clickable-item" onclick="showDetailFromSummary({i-1}, \'taisaku\')">{taisaku}</span>...\n'
                     
                     # 要約データを保存（セッションまたはキャッシュに保存することも可能）
                     request.session['summary_results'] = [
