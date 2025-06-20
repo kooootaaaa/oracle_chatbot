@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+oracle_chatbot_env/
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Oracle
+instantclient*/
+*.zip
+
+# Environment
+.env
+.env.*
+
+# Session files
+django_session*
+
+# Backup files
+*.bak
+*~
