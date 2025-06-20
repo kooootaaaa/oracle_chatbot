@@ -29,7 +29,16 @@ source oracle_chatbot_env/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Oracle Instant Client の設定
+### 3. 環境変数の設定
+```bash
+# .env.example を .env にコピー
+cp .env.example .env
+
+# .env ファイルを編集して実際の値を設定
+nano .env
+```
+
+### 4. Oracle Instant Client の設定
 ```bash
 # Oracle Instant Client を展開（ホームディレクトリにzipファイルがある場合）
 unzip ~/instantclient-basic-linux.x64-21.13.0.0.0dbru.zip
@@ -38,7 +47,7 @@ unzip ~/instantclient-basic-linux.x64-21.13.0.0.0dbru.zip
 export LD_LIBRARY_PATH=/home/kota/instantclient_21_13:$LD_LIBRARY_PATH
 ```
 
-### 4. libaio のインストール
+### 5. libaio のインストール
 ```bash
 sudo apt-get update
 sudo apt-get install -y libaio1t64 libaio-dev
@@ -46,14 +55,6 @@ sudo apt-get install -y libaio1t64 libaio-dev
 # シンボリックリンクの作成（必要な場合）
 sudo ln -sf /usr/lib/x86_64-linux-gnu/libaio.so.1t64 /usr/lib/x86_64-linux-gnu/libaio.so.1
 ```
-
-### 5. データベース設定
-`oracle_chatbot/settings.py`でOracle接続設定を確認：
-- HOST: 192.168.1.19
-- PORT: 1521
-- NAME: JKNA
-- USER: exesa1
-- PASSWORD: oanbdc1
 
 ### 6. マイグレーションの実行
 ```bash

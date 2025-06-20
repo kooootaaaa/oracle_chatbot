@@ -28,8 +28,11 @@ staticfiles/
 instantclient*/
 *.zip
 
-# Environment
+# Environment variables - NEVER COMMIT THESE
 .env
+.env.local
+.env.development
+.env.production
 .env.*
 
 # Session files

@@ -1,10 +1,15 @@
 from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+# .envファイルの読み込み
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-development-key-change-in-production'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 LOGGING = {
     'version': 1,
@@ -66,12 +71,12 @@ WSGI_APPLICATION = 'oracle_chatbot.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'JKNA',
-        'USER': 'exesa1',
-        'PASSWORD': 'oanbdc1',
-        'HOST': '192.168.1.19',
-        'PORT': '1521',
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
+        'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
+        'USER': os.getenv('DB_USER', ''),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', ''),
     }
 }
 
