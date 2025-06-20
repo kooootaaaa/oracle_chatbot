@@ -2,6 +2,7 @@ from django.db import models
 
 class TFurenSho(models.Model):
     hno = models.CharField(max_length=50, primary_key=True, db_column='HNO')
+    keikaku_no = models.CharField(max_length=50, verbose_name='計画書NO', db_column='計画書NO', null=True, blank=True)
     tr_hinban = models.CharField(max_length=50, verbose_name='TR品番', db_column='TR品番')
     tr_hinmei = models.CharField(max_length=200, verbose_name='TR品名', db_column='TR品名')
     shashu = models.CharField(max_length=100, verbose_name='車種', db_column='車種')

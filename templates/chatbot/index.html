@@ -13,7 +13,7 @@
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --background-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --background-gradient: linear-gradient(135deg, #a0c4ff 0%, #74b9ff 100%);
             --glass-bg: rgba(255, 255, 255, 0.25);
             --glass-border: rgba(255, 255, 255, 0.18);
             --text-primary: #2d3748;
@@ -39,25 +39,59 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1400px;
             margin: 0 auto;
             position: relative;
+            display: flex;
+            gap: 2rem;
+            height: calc(100vh - 4rem);
         }
 
-        /* Glassmorphism Header */
-        .header {
+        /* Left Panel - Search */
+        .search-panel {
+            width: 400px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Right Panel - Chat */
+        .chat-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        /* Search Panel Header */
+        .search-header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        /* Chat Panel Header */
+        .chat-header {
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: var(--border-radius) var(--border-radius) 0 0;
-            padding: 2.5rem 2rem;
+            padding: 1.5rem 2rem;
             text-align: center;
             box-shadow: var(--shadow-lg);
             position: relative;
             overflow: hidden;
         }
 
-        .header::before {
+        .search-header::before,
+        .chat-header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -100,17 +134,31 @@
             50% { transform: translateY(-10px); }
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: white;
+        .search-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2d3748;
             margin-bottom: 0.5rem;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
         }
 
-        .header p {
-            font-size: 1.1rem;
-            color: rgba(255,255,255,0.9);
+        .search-header p {
+            font-size: 0.9rem;
+            color: #4a5568;
+            font-weight: 400;
+        }
+
+        .chat-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.5);
+        }
+
+        .chat-header p {
+            font-size: 1rem;
+            color: #4a5568;
             font-weight: 400;
         }
 
@@ -119,10 +167,9 @@
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
-            height: 500px;
+            flex: 1;
             overflow-y: auto;
             padding: 2rem;
-            margin-bottom: 1.5rem;
             box-shadow: var(--shadow-xl);
             position: relative;
         }
@@ -193,7 +240,20 @@
             line-height: 1.6;
         }
 
-        /* Input Container */
+        /* Search Input Container */
+        .search-input-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Chat Input Container */
         .input-container {
             background: var(--glass-bg);
             backdrop-filter: blur(15px);
@@ -207,16 +267,18 @@
         }
 
         #userInput {
-            flex: 1;
+            width: 100%;
             padding: 1rem 1.5rem;
             border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 50px;
+            border-radius: 15px;
             font-size: 1rem;
             outline: none;
             background: rgba(255,255,255,0.9);
             color: var(--text-primary);
             transition: var(--transition);
             backdrop-filter: blur(10px);
+            min-height: 80px;
+            resize: vertical;
         }
 
         #userInput:focus {
@@ -272,12 +334,12 @@
         }
 
         #sendButton {
-            background: var(--primary-gradient);
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
             color: white;
         }
 
         #summaryButton {
-            background: var(--success-gradient);
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
             color: white;
         }
 
@@ -290,6 +352,32 @@
 
         .btn:disabled::before {
             display: none;
+        }
+
+        /* Pagination and Summary Buttons Container */
+        .pagination-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        /* Pagination Buttons */
+        .pagination-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Summary Button */
+        .summary-btn {
+            background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            font-size: 0.9rem;
         }
 
         /* Loading Animation */
@@ -381,7 +469,6 @@
 
         .close {
             color: var(--text-secondary);
-            float: right;
             font-size: 2rem;
             font-weight: 300;
             cursor: pointer;
@@ -392,6 +479,9 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            background: none;
+            border: none;
+            padding: 0;
         }
 
         .close:hover {
@@ -410,6 +500,40 @@
             color: var(--text-primary);
             font-weight: 600;
             font-size: 1.5rem;
+        }
+
+        /* Copy Button */
+        .copy-btn {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+        }
+
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
         .detail-section {
@@ -431,27 +555,48 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+                gap: 1rem;
+            }
+
+            .search-panel {
+                width: 100%;
+                order: 1;
+            }
+
+            .chat-panel {
+                order: 2;
+            }
+
+            .chat-container {
+                height: 400px;
+            }
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 1rem 0.5rem;
             }
 
-            .header {
+            .search-header,
+            .chat-header {
                 padding: 1.5rem 1rem;
             }
 
-            .header h1 {
+            .chat-header h1 {
                 font-size: 1.8rem;
             }
 
             .chat-container {
-                height: 400px;
+                height: 300px;
                 padding: 1rem;
             }
 
-            .input-container {
-                flex-direction: column;
-                gap: 1rem;
+            .search-input-container {
+                padding: 1rem;
             }
 
             .btn {
@@ -505,11 +650,19 @@
     <!-- 詳細表示用モーダル -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">
-                <span class="material-icons">close</span>
-            </span>
             <div class="modal-header">
-                <h2 id="modalTitle">詳細情報</h2>
+                <div class="modal-header-content">
+                    <h2 id="modalTitle">詳細情報</h2>
+                    <div class="modal-controls">
+                        <button class="copy-btn" onclick="copyModalContent()" title="要約をコピー">
+                            <span class="material-icons">content_copy</span>
+                            コピー
+                        </button>
+                        <button class="close" onclick="closeModal()" title="閉じる">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div id="modalBody">
                 <!-- 動的にコンテンツを挿入 -->
@@ -521,35 +674,49 @@
     <div class="particles" id="particles"></div>
     
     <div class="container">
-        <div class="header">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <span class="material-icons">smart_toy</span>
+        <!-- Left Panel - Search -->
+        <div class="search-panel">
+            <div class="search-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <span class="material-icons">search</span>
+                        </div>
                     </div>
+                    <h2>検索</h2>
+                    <p>複数キーワード対応（AND検索）</p>
                 </div>
-                <h1>不具合情報チャットボット</h1>
-                <p>TR品番、TR品名、車種などを入力して不具合情報を検索できます</p>
+            </div>
+            
+            <div class="search-input-container">
+                <textarea id="userInput" placeholder="評技連No.、TR品番、車種、不具合内容、推定原因、対策案などを入力してください
+例：作動耐久 155D（スペース区切り）
+　　作動耐久、155D（読点区切り）
+　　作動耐久,155D（カンマ区切り）" onkeypress="handleKeyPress(event)"></textarea>
+                <button id="sendButton" class="btn" onclick="sendMessage()">
+                    <span class="material-icons">search</span>
+                    検索
+                </button>
             </div>
         </div>
-        
-        <div class="chat-container" id="chatContainer">
-            <div class="message bot-message">
-                こんにちは！不具合情報チャットボットです。<br>
-                TR品番、TR品名、車種名などを入力して、関連する不具合情報を検索してください。
+
+        <!-- Right Panel - Chat -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <div class="header-content">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <span class="material-icons">smart_toy</span>
+                        </div>
+                    </div>
+                    <h1>不具合情報チャットボット</h1>
+                    <p>検索結果がここに表示されます</p>
+                </div>
             </div>
-        </div>
-        
-        <div class="input-container">
-            <input type="text" id="userInput" placeholder="TR品番、TR品名、車種などを入力してください..." onkeypress="handleKeyPress(event)">
-            <button id="sendButton" class="btn" onclick="sendMessage()">
-                <span class="material-icons">search</span>
-                検索
-            </button>
-            <button id="summaryButton" class="btn" onclick="sendSummary()">
-                <span class="material-icons">summarize</span>
-                要約
-            </button>
+            
+            <div class="chat-container" id="chatContainer">
+                <!-- 初期メッセージなし -->
+            </div>
         </div>
     </div>
 
@@ -607,7 +774,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message: message })
+                    body: JSON.stringify({ message: message, page: 1 })
                 });
                 
                 if (!response.ok) {
@@ -625,6 +792,33 @@
             } finally {
                 sendButton.disabled = false;
                 userInput.focus();
+            }
+        }
+
+        async function searchPage(keyword, page) {
+            const loadingMessage = addLoadingMessage();
+            
+            try {
+                const response = await fetch('/chat/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: keyword, page: page })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                removeLoadingMessage();
+                addMessage(data.response);
+                
+            } catch (error) {
+                removeLoadingMessage();
+                console.error('Error:', error);
+                addMessage(`エラーが発生しました: ${error.message}\nもう一度お試しください。`);
             }
         }
 
@@ -634,23 +828,14 @@
             }
         }
 
-        async function sendSummary() {
-            const userInput = document.getElementById('userInput');
-            const summaryButton = document.getElementById('summaryButton');
-            const sendButton = document.getElementById('sendButton');
-            const message = userInput.value.trim();
+        async function showSummary(keyword) {
+            const modal = document.getElementById('detailModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
             
-            if (!message) {
-                addMessage('要約するキーワードを入力してください。');
-                return;
-            }
-            
-            addMessage(`「${message}」の要約を作成`, true);
-            userInput.value = '';
-            summaryButton.disabled = true;
-            sendButton.disabled = true;
-            
-            const loadingMessage = addLoadingMessage();
+            modalTitle.textContent = `「${keyword}」の要約`;
+            modalBody.innerHTML = '<div class="loading">要約を作成中...</div>';
+            modal.style.display = 'block';
             
             try {
                 const response = await fetch('/chat/', {
@@ -659,7 +844,7 @@
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({ 
-                        message: message,
+                        message: keyword,
                         action: 'summary'
                     })
                 });
@@ -669,17 +854,11 @@
                 }
                 
                 const data = await response.json();
-                removeLoadingMessage();
-                addMessage(data.response);
+                modalBody.innerHTML = `<div style="white-space: pre-line; line-height: 1.6;">${data.response}</div>`;
                 
             } catch (error) {
-                removeLoadingMessage();
                 console.error('Error:', error);
-                addMessage(`エラーが発生しました: ${error.message}\nもう一度お試しください。`);
-            } finally {
-                summaryButton.disabled = false;
-                sendButton.disabled = false;
-                userInput.focus();
+                modalBody.innerHTML = `<p style="color: red;">エラーが発生しました: ${error.message}</p>`;
             }
         }
 
@@ -752,6 +931,58 @@
         
         function closeModal() {
             document.getElementById('detailModal').style.display = 'none';
+        }
+
+        function copyModalContent() {
+            const modalBody = document.getElementById('modalBody');
+            const modalTitle = document.getElementById('modalTitle');
+            
+            // HTMLタグを除去してプレーンテキストを取得
+            const titleText = modalTitle.textContent;
+            const bodyText = modalBody.innerText;
+            const fullText = titleText + '\n\n' + bodyText;
+            
+            // クリップボードにコピー
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(fullText).then(function() {
+                    // コピー成功時の視覚的フィードバック
+                    const copyBtn = document.querySelector('.copy-btn');
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<span class="material-icons">check</span>コピー完了';
+                    copyBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00a085 100%)';
+                    
+                    setTimeout(function() {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.style.background = 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)';
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('コピーに失敗しました: ', err);
+                    alert('コピーに失敗しました。手動でテキストを選択してコピーしてください。');
+                });
+            } else {
+                // フォールバック: 古いブラウザ対応
+                const textArea = document.createElement('textarea');
+                textArea.value = fullText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    // コピー成功時の視覚的フィードバック
+                    const copyBtn = document.querySelector('.copy-btn');
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<span class="material-icons">check</span>コピー完了';
+                    copyBtn.style.background = 'linear-gradient(135deg, #00b894 0%, #00a085 100%)';
+                    
+                    setTimeout(function() {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.style.background = 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)';
+                    }, 2000);
+                } catch (err) {
+                    console.error('コピーに失敗しました: ', err);
+                    alert('コピーに失敗しました。手動でテキストを選択してコピーしてください。');
+                }
+                document.body.removeChild(textArea);
+            }
         }
         
         // モーダル外クリックで閉じる
