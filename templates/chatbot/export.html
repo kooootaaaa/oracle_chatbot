@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>データエクスポート - Oracle 不具合情報</title>
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --primary-hover: #1565c0;
+            --secondary-color: #f50057;
+            --background: #f5f5f5;
+            --surface: #ffffff;
+            --text-primary: #212121;
+            --text-secondary: #757575;
+            --border-color: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background-color: var(--surface);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .header-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        .form-container {
+            background-color: var(--surface);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h3 {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .field-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .field-item:hover {
+            background-color: #e8eaf6;
+        }
+
+        .field-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .field-item label {
+            cursor: pointer;
+            user-select: none;
+            flex: 1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .select-all-container {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+        }
+
+        .info-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box p {
+            margin: 5px 0;
+            color: #2e7d32;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .field-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>T_不連書データ エクスポート</h1>
+                <p>必要な項目を選択してExcelファイルをダウンロードできます</p>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'chatbot:index' %}" class="nav-link">← チャットボットに戻る</a>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <form method="post" action="{% url 'chatbot:export' %}">
+                {% csrf_token %}
+                
+                <div class="info-box">
+                    <p>✓ 最大10,000件までエクスポート可能です</p>
+                    <p>✓ 検索キーワードを指定することで、特定のデータのみを抽出できます</p>
+                </div>
+
+                <div class="form-section">
+                    <h3>1. 出力する項目を選択</h3>
+                    <div class="select-all-container">
+                        <label>
+                            <input type="checkbox" id="select-all" onchange="toggleAllFields()">
+                            <strong>すべて選択 / 解除</strong>
+                        </label>
+                    </div>
+                    <div class="field-grid">
+                        {% for choice in form.fields %}
+                            <div class="field-item">
+                                {{ choice.tag }}
+                                <label for="{{ choice.id_for_label }}">{{ choice.choice_label }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>2. 検索条件（オプション）</h3>
+                    <div class="form-group">
+                        <label for="{{ form.search_query.id_for_label }}">{{ form.search_query.label }}</label>
+                        {{ form.search_query }}
+                        <small style="color: var(--text-secondary); display: block; margin-top: 5px;">
+                            複数のキーワードをスペースまたはカンマで区切って入力できます
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>3. 出力設定</h3>
+                    <div class="form-group">
+                        <label for="{{ form.max_records.id_for_label }}">{{ form.max_records.label }}</label>
+                        {{ form.max_records }}
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        📥 Excelファイルをダウンロード
+                    </button>
+                    <button type="reset" class="btn btn-secondary">
+                        リセット
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleAllFields() {
+            const selectAll = document.getElementById('select-all');
+            const checkboxes = document.querySelectorAll('input[name="fields"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+        }
+
+        // 初期状態でいくつかの項目をチェック
+        document.addEventListener('DOMContentLoaded', function() {
+            const defaultFields = ['hno', 'tr_hinban', 'tr_hinmei', 'shashu'];
+            defaultFields.forEach(fieldId => {
+                const checkbox = document.getElementById('id_fields_' + fieldId);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

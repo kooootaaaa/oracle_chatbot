@@ -5,6 +5,12 @@ from dotenv import load_dotenv
 # .envファイルの読み込み
 load_dotenv()
 
+# Oracle設定をインポート
+try:
+    from .db_config import get_oracle_config
+except ImportError:
+    get_oracle_config = None
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key')
@@ -69,16 +75,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'oracle_chatbot.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.getenv('DB_NAME', BASE_DIR / 'db.sqlite3'),
-        'USER': os.getenv('DB_USER', ''),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', ''),
+# Oracle接続が設定されている場合はOracleを使用、そうでなければSQLiteを使用
+if get_oracle_config and os.getenv('ENCRYPTION_KEY'):
+    try:
+        DATABASES = {
+            'default': get_oracle_config()
+        }
+    except Exception as e:
+        print(f"Oracle configuration error: {e}")
+        # フォールバックとしてSQLiteを使用
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

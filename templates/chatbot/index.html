@@ -47,6 +47,40 @@
             height: calc(100vh - 4rem);
         }
 
+        /* Navigation Bar */
+        .nav-bar {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 10px 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .nav-link .material-icons {
+            font-size: 20px;
+        }
+
         /* Left Panel - Search */
         .search-panel {
             width: 400px;
@@ -674,6 +708,13 @@
     <div class="particles" id="particles"></div>
     
     <div class="container">
+        <!-- Navigation Bar -->
+        <div class="nav-bar">
+            <a href="{% url 'chatbot:export' %}" class="nav-link">
+                <span class="material-icons">file_download</span>
+                Excelエクスポート
+            </a>
+        </div>
         <!-- Left Panel - Search -->
         <div class="search-panel">
             <div class="search-header">

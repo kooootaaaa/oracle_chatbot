@@ -1,10 +1,15 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 import json
 import html
 from .models import TFurenSho
+from .forms import ExportForm
+import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment
+from datetime import datetime
+import re
 
 def index(request):
     return render(request, 'chatbot/index.html')
@@ -269,6 +274,101 @@ def chat(request):
             return JsonResponse({'response': f'エラーが発生しました: {str(e)}'})
     
     return JsonResponse({'response': 'POSTリクエストのみ対応しています。'})
+
+def export_view(request):
+    """Excel出力用ビュー"""
+    if request.method == 'POST':
+        form = ExportForm(request.POST)
+        if form.is_valid():
+            # フォームからデータを取得
+            selected_fields = form.cleaned_data['fields']
+            search_query = form.cleaned_data['search_query']
+            max_records = form.cleaned_data['max_records']
+            
+            # クエリの構築
+            query = Q()
+            if search_query:
+                keywords = re.split(r'[,、，\s]+', search_query.strip())
+                keywords = [k.strip() for k in keywords if k.strip()]
+                
+                for keyword in keywords:
+                    query &= (
+                        Q(hno__icontains=keyword) |
+                        Q(keikaku_no__icontains=keyword) |
+                        Q(tr_hinban__icontains=keyword) |
+                        Q(tr_hinmei__icontains=keyword) |
+                        Q(shashu__icontains=keyword) |
+                        Q(fuguai_naiyou__icontains=keyword) |
+                        Q(suitei_fuguai_genin__icontains=keyword) |
+                        Q(taisaku_an__icontains=keyword)
+                    )
+            
+            # データを取得
+            results = TFurenSho.objects.filter(query)[:max_records]
+            
+            # Excelファイルを作成
+            wb = openpyxl.Workbook()
+            ws = wb.active
+            ws.title = 'T_不連書データ'
+            
+            # ヘッダー行のスタイル設定
+            header_font = Font(bold=True, color='FFFFFF')
+            header_fill = PatternFill(start_color='366092', end_color='366092', fill_type='solid')
+            header_alignment = Alignment(horizontal='center', vertical='center')
+            
+            # フィールド名とヘッダーテキストのマッピング
+            field_headers = {
+                'hno': '評技連No. (HNO)',
+                'keikaku_no': '計画書NO',
+                'tr_hinban': 'TR品番',
+                'tr_hinmei': 'TR品名',
+                'shashu': '車種',
+                'fuguai_naiyou': '不具合内容',
+                'suitei_fuguai_genin': '推定不具合原因',
+                'taisaku_an': '対策案等',
+            }
+            
+            # ヘッダー行を作成
+            headers = [field_headers[field] for field in selected_fields]
+            for col_num, header in enumerate(headers, 1):
+                cell = ws.cell(row=1, column=col_num, value=header)
+                cell.font = header_font
+                cell.fill = header_fill
+                cell.alignment = header_alignment
+            
+            # データ行を追加
+            for row_num, result in enumerate(results, 2):
+                for col_num, field in enumerate(selected_fields, 1):
+                    value = getattr(result, field, '')
+                    ws.cell(row=row_num, column=col_num, value=value or '')
+            
+            # 列幅の自動調整
+            for column in ws.columns:
+                max_length = 0
+                column_letter = column[0].column_letter
+                for cell in column:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(str(cell.value))
+                    except:
+                        pass
+                adjusted_width = min(max_length + 2, 50)
+                ws.column_dimensions[column_letter].width = adjusted_width
+            
+            # HTTPレスポンスを作成
+            response = HttpResponse(
+                content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            )
+            filename = f'T_不連書_export_{datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
+            response['Content-Disposition'] = f'attachment; filename={filename}'
+            
+            # Excelファイルを保存
+            wb.save(response)
+            return response
+    else:
+        form = ExportForm()
+    
+    return render(request, 'chatbot/export.html', {'form': form})
 
 @csrf_exempt
 def detail(request):

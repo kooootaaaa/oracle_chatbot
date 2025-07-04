@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./start_server.sh:*)",
+      "Bash(chmod:*)",
+      "Bash(source:*)",
+      "Bash(pip install:*)",
+      "Bash(ls:*)",
+      "Bash(python manage.py runserver:*)",
+      "Bash(python3:*)",
+      "Bash(curl:*)",
+      "Bash(python manage.py:*)",
+      "Bash(ss:*)",
+      "Bash(python:*)",
+      "Bash(pkill:*)",
+      "Bash(export:*)",
+      "Bash(rm:*)",
+      "Bash(kill:*)"
+    ],
+    "deny": []
+  }
+}
