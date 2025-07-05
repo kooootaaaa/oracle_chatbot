@@ -15,7 +15,8 @@
       "Bash(pkill:*)",
       "Bash(export:*)",
       "Bash(rm:*)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }
