@@ -32,33 +32,37 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .header {
             background-color: var(--surface);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            margin-bottom: 15px;
             border-radius: 8px;
             overflow: hidden;
+            flex-shrink: 0;
         }
 
         .header-content {
-            padding: 30px;
+            padding: 15px 20px;
             text-align: center;
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: var(--primary-color);
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .nav-links {
             display: flex;
             justify-content: center;
             gap: 20px;
-            padding: 15px;
+            padding: 8px 15px;
             background-color: #f8f9fa;
             border-top: 1px solid var(--border-color);
         }
@@ -79,11 +83,14 @@
             background-color: var(--surface);
             border-radius: 8px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            padding: 30px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .form-section {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .form-section h3 {
@@ -157,7 +164,10 @@
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 30px;
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            margin-bottom: 0;
         }
 
         .btn {
@@ -202,8 +212,8 @@
         .info-box {
             background-color: #e8f5e9;
             border-left: 4px solid #4caf50;
-            padding: 15px;
-            margin-bottom: 20px;
+            padding: 10px 15px;
+            margin-bottom: 15px;
             border-radius: 4px;
         }
 
@@ -214,11 +224,19 @@
 
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 5px;
             }
 
             .header h1 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+            }
+
+            .header-content {
+                padding: 10px 15px;
+            }
+
+            .form-container {
+                padding: 15px;
             }
 
             .field-grid {
@@ -227,6 +245,12 @@
 
             .button-group {
                 flex-direction: column;
+                position: sticky;
+                bottom: 0;
+                background: var(--surface);
+                margin: 0 -15px;
+                padding: 15px;
+                border-top: 2px solid var(--border-color);
             }
 
             .btn {
@@ -239,7 +263,7 @@
     <div class="container">
         <div class="header">
             <div class="header-content">
-                <h1>T_不連書データ エクスポート</h1>
+                <h1>評技連データ エクスポート</h1>
                 <p>必要な項目を選択してExcelファイルをダウンロードできます</p>
             </div>
             <div class="nav-links">
@@ -297,9 +321,6 @@
                     <button type="submit" class="btn btn-primary">
                         📥 Excelファイルをダウンロード
                     </button>
-                    <button type="reset" class="btn btn-secondary">
-                        リセット
-                    </button>
                 </div>
             </form>
         </div>
@@ -314,15 +335,17 @@
             });
         }
 
-        // 初期状態でいくつかの項目をチェック
+        // 初期状態で全ての項目をチェック
         document.addEventListener('DOMContentLoaded', function() {
-            const defaultFields = ['hno', 'tr_hinban', 'tr_hinmei', 'shashu'];
-            defaultFields.forEach(fieldId => {
-                const checkbox = document.getElementById('id_fields_' + fieldId);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
+            const checkboxes = document.querySelectorAll('input[name="fields"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
             });
+            // 「すべて選択」チェックボックスも更新
+            const selectAll = document.getElementById('select-all');
+            if (selectAll) {
+                selectAll.checked = true;
+            }
         });
     </script>
 </body>
