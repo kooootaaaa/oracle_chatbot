@@ -55,6 +55,7 @@
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
+            height: calc(100vh - 4rem);
         }
 
         /* Right Panel - Chat */
@@ -249,7 +250,8 @@
             border: 1px solid rgba(229, 231, 235, 0.6);
             border-radius: 12px;
             padding: 1.5rem;
-            margin-bottom: 1rem;
+            margin-top: auto;
+            margin-bottom: 0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
@@ -406,32 +408,32 @@
         .button-group {
             display: flex;
             gap: 1rem;
-            margin-top: 1rem;
+            margin: 1rem 0;
             flex-wrap: wrap;
             justify-content: center;
             width: 100%;
         }
 
         #sendButton {
-            background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
-            color: #065f46;
+            background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+            color: #312e81;
         }
 
         #summaryButton {
-            background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
-            color: #065f46;
+            background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
+            color: #312e81;
         }
 
         .export-btn {
-            background: linear-gradient(135deg, #c7d2fe 0%, #a5b4fc 100%);
-            color: #312e81;
+            background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
+            color: #065f46;
             text-decoration: none;
             width: 100%;
             justify-content: center;
         }
 
         .export-btn:hover {
-            background: linear-gradient(135deg, #a5b4fc 0%, #818cf8 100%);
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
             transform: translateY(-3px);
             box-shadow: var(--shadow-xl);
         }
@@ -784,6 +786,21 @@
                 </div>
             </div>
             
+            <div class="search-input-container">
+                <textarea id="userInput" placeholder="検索キーワードを入力してください" onkeypress="handleKeyPress(event)"></textarea>
+                <button id="sendButton" class="btn" onclick="sendMessage()">
+                    <span class="material-icons">search</span>
+                    検索
+                </button>
+            </div>
+            
+            <div class="button-group">
+                <a href="{% url 'chatbot:export' %}" class="btn export-btn">
+                    <span class="material-icons">file_download</span>
+                    Excelエクスポート
+                </a>
+            </div>
+            
             <div class="search-help">
                 <p class="help-title">
                     <span class="material-icons">info</span>
@@ -799,21 +816,6 @@
                         </ul>
                     </li>
                 </ul>
-            </div>
-            
-            <div class="search-input-container">
-                <textarea id="userInput" placeholder="検索キーワードを入力してください" onkeypress="handleKeyPress(event)"></textarea>
-                <button id="sendButton" class="btn" onclick="sendMessage()">
-                    <span class="material-icons">search</span>
-                    検索
-                </button>
-            </div>
-            
-            <div class="button-group">
-                <a href="{% url 'chatbot:export' %}" class="btn export-btn">
-                    <span class="material-icons">file_download</span>
-                    Excelエクスポート
-                </a>
             </div>
         </div>
 
