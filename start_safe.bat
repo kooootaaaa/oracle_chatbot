@@ -1,6 +1,0 @@
-@echo off
-chcp 65001 >nul
-echo Starting Oracle ChatBot...
-echo Entering WSL...
-wsl bash -c "cd ~/ && cd /mnt/c/Users/k_yam/Dropbox/PC/Desktop && cd './システム関連/Study/Oracle_ChatBot' && ./start_app.sh"
-pause
