@@ -274,6 +274,72 @@
             line-height: 1.6;
         }
 
+        /* Search Help Section */
+        .search-help {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+        }
+
+        .help-title .material-icons {
+            font-size: 20px;
+            color: #667eea;
+        }
+
+        .help-list {
+            list-style: none;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+
+        .help-list > li {
+            position: relative;
+            padding-left: 0.5rem;
+        }
+
+        .help-list > li::before {
+            content: '•';
+            position: absolute;
+            left: -0.5rem;
+            color: #667eea;
+        }
+
+        .help-sublist {
+            list-style: none;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .help-sublist li {
+            position: relative;
+            padding-left: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            opacity: 0.8;
+        }
+
+        .help-sublist li::before {
+            content: '◦';
+            position: absolute;
+            left: -0.5rem;
+            color: #667eea;
+        }
+
         /* Search Input Container */
         .search-input-container {
             background: var(--glass-bg);
@@ -729,11 +795,25 @@
                 </div>
             </div>
             
+            <div class="search-help">
+                <p class="help-title">
+                    <span class="material-icons">info</span>
+                    検索キーワードの入力方法
+                </p>
+                <ul class="help-list">
+                    <li>評技連No.、TR品番、車種、不具合内容、推定原因、対策案など</li>
+                    <li>複数キーワードの区切り方:
+                        <ul class="help-sublist">
+                            <li>スペース区切り: 作動耐久 155D</li>
+                            <li>読点区切り: 作動耐久、155D</li>
+                            <li>カンマ区切り: 作動耐久,155D</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
             <div class="search-input-container">
-                <textarea id="userInput" placeholder="評技連No.、TR品番、車種、不具合内容、推定原因、対策案などを入力してください
-例：作動耐久 155D（スペース区切り）
-　　作動耐久、155D（読点区切り）
-　　作動耐久,155D（カンマ区切り）" onkeypress="handleKeyPress(event)"></textarea>
+                <textarea id="userInput" placeholder="検索キーワードを入力してください" onkeypress="handleKeyPress(event)"></textarea>
                 <button id="sendButton" class="btn" onclick="sendMessage()">
                     <span class="material-icons">search</span>
                     検索
